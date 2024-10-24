@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     const squares = document.querySelectorAll('#board div');
-    let status = document.getElementById('status');
-
+    const status = document.getElementById('status');
     let player = 'X';
     const board = Array(9).fill(null);
-    let isGameActive = true
+    let isActive = true
 
     squares.forEach((square, i) => {
         square.classList.add('square');
 
         square.addEventListener('click', function() {
-            if (!board[i] && isGameActive) {
+            if (!board[i] && isActive) {
                 board[i] = player;
                 square.textContent = player;
                 square.classList.add(player);
@@ -18,13 +17,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 if(isWinnerAvailable(board, player)){
                     status.textContent = "Congratulations! " + player + " is the Winner!";
                     status.classList.add('you-won');
-                    isGameActive = false;
+                    isActive = false;
                     return;
                 }
 
                 if(isDraw(board)){
                     status.textContent = "Game was a Draw!";
-                    isGameActive = false;
+                    isActive = false;
                     return;
                 }
 
@@ -33,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         square.addEventListener('mouseover', function (){
-            if(!board[i] && isGameActive){
+            if(!board[i] && isActive){
                 square.classList.add('hover');
                 square.classList.add(player);
             }
@@ -46,6 +45,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 square.classList.remove(player);
             }
         })
+    });
+
+    const newGameBtn = document.querySelector('.btn');
+
+    newGameBtn.addEventListener('click', function(){
+        for(let i = 0; i < board.length; i++){
+            board[i] = null
+        }
+
+        squares.forEach(square => {
+            square.textContent = '';
+        });
+
+        status.textContent = "Move your mouse over a square and click to play an X or an O.";
+        status.classList.remove('you-won');
+
+        player = 'X'
+        isActive = true;
     });
 });
 
